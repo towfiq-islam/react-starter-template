@@ -1,6 +1,6 @@
-import { useRegister } from "@/Hooks/auth.mutation";
 import React from "react";
 import { Link } from "react-router-dom";
+import { useRegister } from "@/Hooks/api/auth_api";
 
 const Register = () => {
   const { mutateAsync: registrationMutation, isPending } = useRegister();

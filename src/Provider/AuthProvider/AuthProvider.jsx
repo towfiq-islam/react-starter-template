@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { useGetUserData } from "@/Hooks/auth.mutation";
+import { useGetUserData } from "@/Hooks/api/auth_api";
 import useLocalStorage from "@/Hooks/useLocalStorage";
 import { createContext, useEffect, useState } from "react";
 export const AuthContextProvider = createContext(null);
