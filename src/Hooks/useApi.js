@@ -32,11 +32,15 @@ export default function useApi({
 
   return useMutation({
     mutationKey: key,
-    mutationFn: async data => {
-      const res = await axiosInstance[method](endpoint, data, {
+    mutationFn: async (variables = {}) => {
+      const dynamicEndpoint = variables.endpoint || endpoint;
+      const payload = variables.data || variables;
+
+      const res = await axiosInstance[method](dynamicEndpoint, payload, {
         headers,
         ...axiosOptions,
       });
+
       return res?.data;
     },
     onSuccess,
