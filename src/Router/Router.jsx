@@ -1,24 +1,23 @@
-import Home from "@/Pages/MainPages/Home";
-import Login from "@/Pages/AuthPages/Login";
-import PrivateRouter from "./PrivateRouter";
+import { createBrowserRouter } from "react-router-dom";
 import AuthLayout from "@/Layout/AuthLayout";
 import MainLayout from "@/Layout/MainLayout";
+import Login from "@/Pages/AuthPages/Login";
 import Register from "@/Pages/AuthPages/Register";
-import ErrorPage from "@/Pages/ErrorPage/ErrorPage";
-import { createBrowserRouter } from "react-router-dom";
-import Settings from "@/Pages/DashboardPages/Settings";
+import Home from "@/Pages/MainPages/Home";
+import PrivateRouter from "@/Router/PrivateRouter";
 import DashboardLayout from "@/Layout/DashboardLayout";
 import DashboardHome from "@/Pages/DashboardPages/DashboardHome";
+import Settings from "@/Pages/DashboardPages/Settings";
+import ErrorPage from "@/Pages/ErrorPage/ErrorPage";
 
 const router = createBrowserRouter([
   // Main Layout
   {
     path: "/",
     element: <MainLayout />,
-    errorElement: <ErrorPage />,
     children: [
       {
-        path: "/",
+        index: true,
         element: <Home />,
       },
     ],
@@ -28,7 +27,6 @@ const router = createBrowserRouter([
   {
     path: "/auth",
     element: <AuthLayout />,
-    errorElement: <ErrorPage />,
     children: [
       {
         path: "register",
@@ -49,7 +47,6 @@ const router = createBrowserRouter([
         <DashboardLayout />
       </PrivateRouter>
     ),
-    errorElement: <ErrorPage />,
     children: [
       {
         index: true,
@@ -60,6 +57,12 @@ const router = createBrowserRouter([
         element: <Settings />,
       },
     ],
+  },
+
+  // 404
+  {
+    path: "*",
+    element: <ErrorPage />,
   },
 ]);
 

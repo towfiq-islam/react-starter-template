@@ -1,5 +1,5 @@
-import { axiosSecure } from "@/Hooks/useAxiosSecure";
-import { axiosPublic } from "@/Hooks/useAxiosPublic";
+import { axiosPublic } from "@/lib/axiosPublic";
+import { axiosSecure } from "@/lib/axiosSecure";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 export default function useApi({
@@ -12,39 +12,67 @@ export default function useApi({
   params,
   headers,
   queryOptions,
-  mutationOptions,
   axiosOptions,
   enabled = true,
 }) {
   const axiosInstance = isPrivate ? axiosSecure : axiosPublic;
 
-  if (method === "get") {
-    return useQuery({
-      queryKey: key,
-      queryFn: async () => {
-        const res = await axiosInstance.get(endpoint, { params, headers });
-        return res.data;
-      },
-      enabled,
-      ...queryOptions,
-    });
-  }
+  // =========================
+  // GET REQUEST
+  // =========================
+  const query = useQuery({
+    queryKey: key,
+    enabled: method === "get" && enabled,
+    queryFn: async () => {
+      const res = await axiosInstance.get(endpoint, { params, headers });
+      return res.data;
+    },
+    retry: false,
+    refetchOnWindowFocus: false,
+    ...queryOptions,
+  });
 
-  return useMutation({
-    mutationKey: key,
+  // =========================
+  // MUTATION REQUEST
+  // =========================
+  const mutation = useMutation({
     mutationFn: async (variables = {}) => {
       const dynamicEndpoint = variables.endpoint || endpoint;
-      const payload = variables.data || variables;
+      const payload = variables.data ?? variables;
 
-      const res = await axiosInstance[method](dynamicEndpoint, payload, {
+      // Support:
+      // - mutate({ data })
+      // - mutate({ endpoint: "/api/other" })
+      // - mutate({ endpoint: "/api/other", data })
+
+      const config = {
         headers,
         ...axiosOptions,
-      });
+      };
 
-      return res?.data;
+      // DELETE
+      if (method === "delete") {
+        const { data } = await axiosInstance.delete(dynamicEndpoint, {
+          data: payload,
+          ...config,
+        });
+
+        return data;
+      }
+
+      // OTHER METHODS
+      const { data } = await axiosInstance[method](
+        dynamicEndpoint,
+        payload,
+        config,
+      );
+
+      return data;
     },
+
     onSuccess,
     onError,
-    ...mutationOptions,
   });
+
+  return method === "get" ? query : mutation;
 }

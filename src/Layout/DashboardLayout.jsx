@@ -8,14 +8,14 @@ const navLinks = [
   { id: 3, label: "Go to home", path: "/" },
 ];
 
-export default function DashboardLayout({ children }) {
+export default function DashboardLayout() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
   return (
     <section className="min-h-screen max-h-screen flex flex-col">
       {/* Header */}
-      <header className="bg-white border-b h-[84px] flex justify-between items-center px-10 fixed w-full left-0 right-0 z-40">
+      <header className="bg-white border-b h-21 flex justify-between items-center px-10 fixed w-full left-0 right-0 z-40">
         <div onClick={() => navigate("/")} className="cursor-pointer">
           Logo
         </div>
@@ -33,12 +33,12 @@ export default function DashboardLayout({ children }) {
       </header>
 
       {/* Main */}
-      <main className="flex overflow-x-hidden mt-[84px] h-[calc(100vh-84px)]">
+      <main className="flex overflow-x-hidden mt-21 h-[calc(100vh-84px)]">
         {/* Sidebar */}
         <aside
           className={`${
             open ? "translate-x-0" : "-translate-x-full xl:translate-x-0"
-          } fixed top-0 left-0 z-[999] 2xl:static max-2xl:h-screen w-72 duration-500 transition-transform border-r bg-white p-5 shrink-0 overflow-y-auto`}
+          } fixed top-0 left-0 z-999 2xl:static max-2xl:h-screen w-72 duration-500 transition-transform border-r bg-white p-5 shrink-0 overflow-y-auto`}
         >
           <p
             onClick={() => navigate("/")}

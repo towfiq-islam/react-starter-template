@@ -1,6 +1,6 @@
 export function setItem(key, value) {
   try {
-    window.localStorage.setItem(key, value);
+    localStorage.setItem(key, JSON.stringify(value));
   } catch (err) {
     console.error(err);
   }
@@ -8,8 +8,8 @@ export function setItem(key, value) {
 
 export function getItem(key) {
   try {
-    const data = window.localStorage.getItem(key);
-    return data ? data : undefined;
+    const data = localStorage.getItem(key);
+    return data ? JSON.parse(data) : undefined;
   } catch (err) {
     console.error(err);
   }
@@ -17,7 +17,7 @@ export function getItem(key) {
 
 export function removeItem(key) {
   try {
-    window.localStorage.removeItem(key);
+    localStorage.removeItem(key);
   } catch (err) {
     console.error(err);
   }
